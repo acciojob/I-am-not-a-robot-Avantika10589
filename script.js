@@ -4,16 +4,15 @@ const verifyBtn = document.getElementById("verify");
 const para = document.getElementById("para");
 
 const images = [
-  "https://picsum.photos/id/237/200/300",
-  "https://picsum.photos/seed/picsum/200/300",
-  "https://picsum.photos/200/300?grayscale",
-  "https://picsum.photos/200/300/",
-  "https://picsum.photos/200/300.jpg"
+  { src: "https://picsum.photos/id/237/200/300", cls: "img1" },
+  { src: "https://picsum.photos/seed/picsum/200/300", cls: "img2" },
+  { src: "https://picsum.photos/200/300?grayscale", cls: "img3" },
+  { src: "https://picsum.photos/200/300/", cls: "img4" },
+  { src: "https://picsum.photos/200/300.jpg", cls: "img5" }
 ];
 
 let chosen = [];
 let selected = [];
-
 
 function loadImages() {
   container.innerHTML = "";
@@ -23,27 +22,26 @@ function loadImages() {
   chosen = [];
   selected = [];
 
-
   let imgs = [...images];
   let dup = imgs[Math.floor(Math.random() * imgs.length)];
   imgs.push(dup);
 
-
   imgs.sort(() => Math.random() - 0.5);
 
-  imgs.forEach(src => {
+  imgs.forEach(obj => {
     let img = document.createElement("img");
-    img.src = src;
-    img.onclick = () => selectImage(img, src);
+    img.src = obj.src;
+    img.classList.add(obj.cls);   // ✅ Add class for Cypress tests
+    img.onclick = () => selectImage(img, obj.cls);
     container.appendChild(img);
   });
 }
 
-function selectImage(img, src) {
+function selectImage(img, cls) {
   if (selected.length < 2 && !selected.includes(img)) {
     img.classList.add("selected");
     selected.push(img);
-    chosen.push(src);
+    chosen.push(cls);
     resetBtn.style.display = "inline";
   }
 
